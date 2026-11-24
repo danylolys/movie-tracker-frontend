@@ -1,6 +1,9 @@
 .container {
   width: 100%;
   margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav {
@@ -24,4 +27,26 @@
 
 .nav a.active {
   color: var(--text-3);
+}
+
+.auth {
+  display: flex;
+  align-items: center;
+}
+
+.auth a,
+.auth button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e50914;
+  color: white;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.auth a:hover,
+.auth button:hover {
+  background-color: #c40812;
 }

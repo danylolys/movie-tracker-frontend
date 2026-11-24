@@ -58,10 +58,12 @@ function Home() {
           {movies.map((movie) => (
             <MediaCard
               key={movie.id}
+              id={movie.id}
               title={movie.title}
               posterPath={movie.poster_path}
               releaseDate={movie.release_date}
-              voteAverage={movie.vote_average}
+              voteAverage={Number(movie.vote_average || 0)}
+              mediaType="movie"
             />
           ))}
         </div>
@@ -74,10 +76,12 @@ function Home() {
           {tvShows.map((tvShow) => (
             <MediaCard
               key={tvShow.id}
-              title={tvShow.name}
+              id={tvShow.id}
+              title={tvShow.title}
               posterPath={tvShow.poster_path}
-              releaseDate={tvShow.first_air_date}
-              voteAverage={tvShow.vote_average}
+              releaseDate={tvShow.release_date}
+              voteAverage={Number(tvShow.vote_average || 0)}
+              mediaType="series"
             />
           ))}
         </div>

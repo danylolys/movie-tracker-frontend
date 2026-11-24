@@ -214,10 +214,12 @@ function Series() {
               {series.map((item) => (
                 <MediaCard
                   key={item.id}
-                  title={item.name}
+                  id={item.id}
+                  title={item.title}
                   posterPath={item.poster_path}
-                  releaseDate={item.first_air_date}
+                  releaseDate={item.release_date}
                   voteAverage={Number(item.vote_average || 0)}
+                  mediaType="series"
                 />
               ))}
             </div>

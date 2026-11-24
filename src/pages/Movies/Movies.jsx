@@ -221,10 +221,12 @@ function Movies() {
               {movies.map((movie) => (
                 <MediaCard
                   key={movie.id}
+                  id={movie.id}
                   title={movie.title}
                   posterPath={movie.poster_path}
                   releaseDate={movie.release_date}
                   voteAverage={Number(movie.vote_average || 0)}
+                  mediaType="movie"
                 />
               ))}
             </div>
@@ -369,7 +371,7 @@ function Movies() {
             </div>
           </div>
         </aside>
-        
+
       </div>
     </div>
   );

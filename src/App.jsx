@@ -8,6 +8,8 @@ import Profile from './pages/Profile/Profile'
 import MovieDetails from './pages/MovieDetails/MovieDetails'
 import Watchlist from './pages/Watchlist/Watchlist'
 import TvDetails from './pages/TvDetails/TvDetails'
+import PersonDetails from './pages/PersonDetails/PersonDetails'
+import MediaCrew from './pages/MediaCrew/MediaCrew'
 
 import Header from './components/Header/Header'
 import AuthProvider from './context/AuthProvider'
@@ -30,6 +32,8 @@ function App() {
             <Route path='/auth' element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/people/:id" element={<PersonDetails />} />
+            <Route path="/media-crew" element={<MediaCrew />} />
           </Routes>
         </div>
       </div>

@@ -1,32 +1,49 @@
+
 import { useState } from 'react'
 
 import AuthContext from './AuthContext'
 
 const API_URL = 'http://localhost:5194/api'
 
-function getUserIdFromToken(token) {
+function getTokenPayload(token) {
   if (!token) return null
 
   try {
-    const payload = JSON.parse(
+    return JSON.parse(
       atob(
-        token
-          .split('.')[1]
+        token.split('.')[1]
           .replace(/-/g, '+')
           .replace(/_/g, '/')
       )
     )
-
-    return (
-      payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ||
-      payload.nameid ||
-      payload.sub ||
-      payload.userId ||
-      null
-    )
   } catch {
     return null
   }
+}
+
+function getUserIdFromToken(token) {
+  const payload = getTokenPayload(token)
+
+  return (
+    payload?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ||
+    payload?.nameid ||
+    payload?.sub ||
+    payload?.userId ||
+    null
+  )
+}
+
+function getRoleFromToken(token) {
+  const payload = getTokenPayload(token)
+
+  if (!payload) return null
+
+  return (
+    payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] ||
+    payload.role ||
+    payload.roles ||
+    null
+  )
 }
 
 function AuthProvider({ children }) {
@@ -35,6 +52,11 @@ function AuthProvider({ children }) {
   )
 
   const userId = getUserIdFromToken(token)
+  const role = getRoleFromToken(token)
+
+  const isAdmin = Array.isArray(role)
+    ? role.includes('Administrator')
+    : role === 'Administrator'
 
   const login = async (email, password) => {
     const response = await fetch(`${API_URL}/Auth/login`, {
@@ -87,6 +109,8 @@ function AuthProvider({ children }) {
       value={{
         token,
         userId,
+        role,
+        isAdmin,
         isAuthenticated: !!token,
         login,
         register,

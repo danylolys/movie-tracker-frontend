@@ -1,0 +1,191 @@
+.container {
+  margin: 30px 0;
+  padding: 24px;
+  background: #1c1c1c;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.editButton,
+.addButton,
+.saveButton,
+.cancelButton,
+.deleteButton {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.editButton {
+  background: #444;
+  color: white;
+}
+
+.editButton:hover {
+  background: #555;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.video {
+  width: 280px;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #111;
+}
+
+.video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.externalLink {
+  width: 110px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  background: #292929;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #ddd;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.externalLink:hover {
+  background: #383838;
+  transform: translateY(-3px);
+}
+
+.linkIcon {
+  font-size: 26px;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editItem,
+.addItem {
+  display: flex;
+  gap: 10px;
+}
+
+.editItem input,
+.addItem input {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  background: #292929;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.editItem input:focus,
+.addItem input:focus {
+  outline: none;
+  border-color: #777;
+}
+
+.deleteButton {
+  background: #8b3030;
+  color: white;
+}
+
+.deleteButton:hover {
+  background: #a83a3a;
+}
+
+.addButton {
+  background: #444;
+  color: white;
+}
+
+.addButton:hover {
+  background: #555;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.saveButton {
+  background: #347a4b;
+  color: white;
+}
+
+.saveButton:hover {
+  background: #41945c;
+}
+
+.cancelButton {
+  background: #444;
+  color: white;
+}
+
+.cancelButton:hover {
+  background: #555;
+}
+
+.saveButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff7777;
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 16px;
+  }
+
+  .video {
+    width: 100%;
+  }
+
+  .editItem,
+  .addItem {
+    flex-wrap: wrap;
+  }
+
+  .editItem input,
+  .addItem input {
+    flex-basis: 100%;
+  }
+}

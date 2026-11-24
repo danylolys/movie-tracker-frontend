@@ -215,9 +215,9 @@ function Series() {
                 <MediaCard
                   key={item.id}
                   id={item.id}
-                  title={item.title}
+                  title={item.name}
                   posterPath={item.poster_path}
-                  releaseDate={item.release_date}
+                  releaseDate={item.first_air_date}
                   voteAverage={Number(item.vote_average || 0)}
                   mediaType="series"
                 />

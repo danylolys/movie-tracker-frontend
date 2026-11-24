@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import WatchlistControl from "../../components/WatchlistControl/WatchlistControl";
+import Trailer from "../../components/Trailer/Trailer";
+import Media from "../../components/Media/Media";
 
 import styles from "./MovieDetails.module.css";
 
@@ -13,6 +15,8 @@ function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -154,6 +158,11 @@ function MovieDetails() {
         mediaType={1}
       />
 
+      <Media
+        tmdbId={id}
+        type={1}
+      />
+
       <section className={styles.content}>
         <div className={styles.movieFacts}>
           <h2>Інформація про фільм</h2>
@@ -191,13 +200,31 @@ function MovieDetails() {
           </div>
         </div>
 
+        <Trailer mediaId={id} mediaType={1} />
+
         {cast.length > 0 && (
           <div className={styles.castSection}>
             <h2>Акторський склад</h2>
 
+            <button
+              onClick={() =>
+                navigate("/media-crew", {
+                  state: {
+                    title: movie.title,
+                    backUrl: `/series/${id}`,
+                    cast: movie.credits?.cast || [],
+                    crew: movie.credits?.crew || []
+                  }
+                })
+              }
+            >
+              Переглянути всю команду
+            </button>
+
             <div className={styles.castGrid}>
               {cast.map((person) => (
-                <article
+                <Link
+                  to={`/people/${person.id}`}
                   key={person.id}
                   className={styles.castCard}
                 >
@@ -220,7 +247,7 @@ function MovieDetails() {
                       {person.character || "Невідома роль"}
                     </span>
                   </div>
-                </article>
+                </Link>
               ))}
             </div>
           </div>

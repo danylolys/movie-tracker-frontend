@@ -77,9 +77,9 @@ function Home() {
             <MediaCard
               key={tvShow.id}
               id={tvShow.id}
-              title={tvShow.title}
+              title={tvShow.name}
               posterPath={tvShow.poster_path}
-              releaseDate={tvShow.release_date}
+              releaseDate={tvShow.first_air_date}
               voteAverage={Number(tvShow.vote_average || 0)}
               mediaType="series"
             />

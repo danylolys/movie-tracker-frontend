@@ -1,0 +1,161 @@
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  color: var(--text-color);
+}
+
+.personHeader {
+  display: flex;
+  gap: 35px;
+  margin-bottom: 40px;
+}
+
+.profile {
+  flex-shrink: 0;
+  width: 280px;
+}
+
+.profileImage {
+  display: block;
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2 / 3;
+  background: var(--card-background);
+  border-radius: 12px;
+  color: var(--secondary-text);
+}
+
+.personInfo {
+  flex: 1;
+  padding-top: 10px;
+}
+
+.personInfo h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.department {
+  margin: 10px 0 25px;
+  color: var(--secondary-text);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fact span {
+  color: var(--secondary-text);
+  font-size: 14px;
+}
+
+.fact strong {
+  font-weight: 500;
+}
+
+.biography,
+.aliases {
+  margin-bottom: 35px;
+}
+
+.biography h2,
+.aliases h2,
+.filmography > h2,
+.creditsSection h2 {
+  margin-bottom: 18px;
+  font-size: 23px;
+}
+
+.biography p {
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.aliasList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.aliasList span {
+  padding: 7px 12px;
+  background: var(--card-background);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.filmography {
+  margin-top: 40px;
+}
+
+.creditsSection {
+  margin-bottom: 40px;
+}
+
+.creditsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 22px 16px;
+}
+
+.creditCard {
+  min-width: 0;
+}
+
+.creditRole {
+  margin: 8px 0 0;
+  color: var(--secondary-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.message,
+.empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+@media (max-width: 650px) {
+  .personHeader {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile {
+    width: 220px;
+  }
+
+  .personInfo {
+    width: 100%;
+  }
+
+  .personInfo h1 {
+    font-size: 26px;
+  }
+
+  .facts {
+    grid-template-columns: 1fr;
+  }
+
+  .creditsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

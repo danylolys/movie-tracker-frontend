@@ -1,17 +1,36 @@
-.card {
-  flex: 0 1 160px;
-  min-width: 160px;
-  height: 305px;
+.link {
+  display: block;
+  width: 180px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
 }
 
-.card:hover .poster img {
-  box-shadow: 0px 0px 8px 2px var(--color-surface);
+.card {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.link:hover .card {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
 }
 
 .poster {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 270px;
+  overflow: hidden;
+  background: var(--color-background);
 }
 
 .poster img {
@@ -19,55 +38,86 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--border-radius-default);
+  transition: transform 0.3s ease;
+}
 
-  transition: box-shadow 0.5s ease;
+.link:hover .poster img {
+  transform: scale(1.04);
 }
 
 .noPoster {
-  height: 100%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #aaaaaa;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  color: var(--color-secondary);
+  font-size: 13px;
+  text-align: center;
 }
 
 .movieInfo {
-  padding-top: 10px;
-  height: 65px;
-  box-sizing: border-box;
-  overflow: hidden;
+  padding: 12px;
 }
 
 .movieInfo h2 {
-  font-size: 16px;
-  margin: 0 0 10px;
-
-  white-space: nowrap;
   overflow: hidden;
+  margin: 0 0 10px;
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+  white-space: nowrap;
   text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.link:hover .movieInfo h2 {
+  color: var(--color-accent);
 }
 
 .movieDetails {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-secondary);
+  font-size: 11px;
 }
 
 .movieDate {
-  color: var(--color-text-2);
-  font-size: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .rating {
-  color: var(--color-text-2);
-  font-size: 13px;
-  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 4px 7px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background: var(--color-background);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
 }
 
-.link {
-  color: inherit;
-  text-decoration: none;
-  display: block;
+@media (max-width: 600px) {
+  .movieInfo {
+    padding: 9px;
+  }
+
+  .movieInfo h2 {
+    font-size: 12px;
+  }
+
+  .movieDetails {
+    font-size: 10px;
+  }
+
+  .rating {
+    padding: 3px 5px;
+    font-size: 9px;
+  }
 }

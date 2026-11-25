@@ -13,54 +13,59 @@ function Header() {
     navigate('/')
   }
 
+  const getNavClass = ({ isActive }) =>
+    isActive ? `${styles.link} ${styles.active}` : styles.link
+
   return (
     <header className={styles.container}>
-      <nav className={styles.nav}>
-        <NavLink to="/" end className={({ isActive }) =>
-          isActive ? styles.active : ''
-        }>
-          Головна
+      <div className={styles.headerContent}>
+        <NavLink to="/" className={styles.logo}>
+          Movie<span>Tracker</span>
         </NavLink>
 
-        <NavLink to="/movies" className={({ isActive }) =>
-          isActive ? styles.active : ''
-        }>
-          Фільми
-        </NavLink>
-
-        <NavLink to="/series" className={({ isActive }) =>
-          isActive ? styles.active : ''
-        }>
-          Серіали
-        </NavLink>
-        
-        <NavLink to="/profile" className={({ isActive }) =>
-          isActive ? styles.active : ''
-        }>
-          Профіль
-        </NavLink>
-        <NavLink to="/watchlist" className={({ isActive }) =>
-          isActive ? styles.active : ''
-        }>
-          Мій список
-        </NavLink>
-      </nav>
-
-      <div className={styles.auth}>
-        {isAuthenticated ? (
-          <button onClick={handleLogout}>
-            Вийти
-          </button>
-        ) : (
-          <NavLink
-            to="/auth"
-            className={({ isActive }) =>
-              isActive ? styles.active : ''
-            }
-          >
-            Увійти
+        <nav className={styles.nav}>
+          <NavLink to="/" end className={getNavClass}>
+            Головна
           </NavLink>
-        )}
+
+          <NavLink to="/movies" className={getNavClass}>
+            Фільми
+          </NavLink>
+
+          <NavLink to="/series" className={getNavClass}>
+            Серіали
+          </NavLink>
+        </nav>
+
+        <div className={styles.auth}>
+          {isAuthenticated ? (
+            <>
+              <NavLink to="/watchlist" className={getNavClass}>
+                Мій список
+              </NavLink>
+
+              <NavLink to="/profile" className={getNavClass}>
+                Профіль
+              </NavLink>
+
+              <button
+                className={styles.logoutButton}
+                onClick={handleLogout}
+              >
+                Вийти
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/auth"
+              className={({ isActive }) =>
+                `${styles.loginButton} ${isActive ? styles.loginActive : ''}`
+              }
+            >
+              Увійти
+            </NavLink>
+          )}
+        </div>
       </div>
     </header>
   )

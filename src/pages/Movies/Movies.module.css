@@ -1,105 +1,27 @@
 .container {
-  padding: 40px 6%;
-  padding-bottom: 100px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 35px 30px 60px;
+  color: var(--color-white);
+  font-family: var(--font-family-base);
 }
 
 .title {
-  font-size: 30px;
-  margin-bottom: 30px;
+  margin: 0 0 30px;
+  font-size: 32px;
+  font-weight: var(--font-weight-black);
+  letter-spacing: -0.5px;
 }
 
 .catalog {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
-  gap: 35px;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 28px;
   align-items: start;
 }
 
-/* Фільтри */
-
-.sidebar {
-  background: var(--color-background);
-  border-radius: 10px;
-  padding: 22px;
-}
-
-.filterHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 25px;
-}
-
-.filterHeader h2 {
-  font-size: 21px;
-  margin: 0;
-  color: var(--color-text-3);
-}
-
-.resetButton {
-  border: none;
-  background: none;
-  color: var(--color-primary);
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.filterGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.filterGroup > label {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.filterGroup select,
-.filterGroup input[type="number"] {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  outline: none;
-  font-size: 14px;
-}
-
-.filterGroup select:focus,
-.filterGroup input:focus {
-  border-color: var(--color-primary);
-}
-
-.rangeInputs {
-  display: flex;
-  gap: 8px;
-}
-
-.genres {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 250px;
-  overflow-y: auto;
-}
-
-.genreOption {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.genreOption input {
-  accent-color: var(--color-primary);
-  cursor: pointer;
-}
-
-/* Каталог */
+/* Content */
 
 .content {
   min-width: 0;
@@ -107,59 +29,81 @@
 
 .resultsHeader {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  font-size: 15px;
-  color: #666;
+  align-items: center;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-secondary);
+  font-size: 14px;
+}
+
+.resultsHeader span:first-child {
+  color: var(--color-white);
+  font-size: 17px;
+  font-weight: var(--font-weight-bold);
 }
 
 .moviesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
+  grid-template-columns: repeat(auto-fill, 180px);
   justify-content: space-between;
-  gap: 25px 18px;
+  gap: 24px 18px;
 }
 
-/* Повідомлення */
+/* Messages */
 
 .message {
-  padding: 60px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+  padding: 25px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
+  color: var(--color-secondary);
+  font-size: 15px;
   text-align: center;
-  color: #777;
 }
 
-/* Пагінація */
+/* Pagination */
 
 .pagination {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-
-  width: 100%;
-  box-sizing: border-box;
-
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 18px;
+  margin-top: 35px;
+}
 
-  padding: 15px 0;
-  background: var(--color-background-deep);
-
-  z-index: 1000;
+.pagination span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
 }
 
 .pagination button {
-  padding: 10px 18px;
-  border-radius: 6px;
-  background: var(--color-primary);
-  color: var(--color-text-1);
+  padding: 10px 17px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .pagination button:hover:not(:disabled) {
-  background: var(--color-primary-hover);
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
 }
 
 .pagination button:disabled {
@@ -167,47 +111,220 @@
   cursor: not-allowed;
 }
 
-.pagination span {
-  font-weight: 600;
+/* Sidebar */
+
+.sidebar {
+  position: sticky;
+  top: 25px;
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
 }
 
-/* Адаптивність */
-
-@media (max-width: 1200px) {
-  .moviesGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.filterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
-@media (max-width: 850px) {
+.filterHeader h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: var(--font-weight-bold);
+}
+
+.resetButton {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-accent);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.resetButton:hover {
+  background: rgba(212, 42, 45, 0.12);
+}
+
+/* Filter groups */
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.filterGroup:last-child {
+  margin-bottom: 0;
+}
+
+.filterGroup > label {
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: var(--font-weight-bold);
+}
+
+/* Inputs and selects */
+
+.filterGroup input:not([type="checkbox"]),
+.filterGroup select {
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  outline: none;
+  background: var(--color-background);
+  color: var(--color-white);
+  font-family: inherit;
+  font-size: 13px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.filterGroup input::placeholder {
+  color: #696970;
+}
+
+.filterGroup input:focus,
+.filterGroup select:focus {
+  border-color: var(--color-accent);
+}
+
+.filterGroup select {
+  cursor: pointer;
+}
+
+.filterGroup select option {
+  background: var(--color-surface);
+  color: var(--color-white);
+}
+
+/* Genres */
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.genreOption {
+  position: relative;
+  cursor: pointer;
+}
+
+.genreOption input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.genreOption span {
+  display: block;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-background);
+  color: var(--color-secondary);
+  font-size: 11px;
+  transition: all 0.2s;
+}
+
+.genreOption:hover span {
+  border-color: var(--color-accent);
+  color: var(--color-white);
+}
+
+.genreOption input:checked + span {
+  border-color: var(--color-accent);
+  background: rgba(212, 42, 45, 0.15);
+  color: var(--color-white);
+}
+
+.genreOption input:focus-visible + span {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Range inputs */
+
+.rangeInputs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
   .catalog {
     grid-template-columns: 1fr;
   }
 
+  .sidebar {
+    position: static;
+    grid-row: 1;
+  }
+
+  .content {
+    grid-row: 2;
+  }
+
   .moviesGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, 180px);
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 600px) {
   .container {
-    padding: 25px 4%;
+    padding: 25px 15px 40px;
+  }
+
+  .title {
+    margin-bottom: 22px;
+    font-size: 25px;
+  }
+
+  .sidebar {
+    padding: 16px;
   }
 
   .moviesGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 15px 10px;
+    grid-template-columns: repeat(2, minmax(0, 180px));
+    justify-content: center;
   }
 
-  .movieInfo {
-    padding: 9px;
+  .link {
+    width: 100%;
   }
 
-  .movieInfo h2 {
-    font-size: 13px;
+  .poster {
+    height: auto;
+    aspect-ratio: 2 / 3;
   }
 
-  .movieDetails {
-    font-size: 11px;
+  .resultsHeader {
+    font-size: 12px;
+  }
+
+  .resultsHeader span:first-child {
+    font-size: 15px;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+  .pagination button {
+    padding: 9px 12px;
+    font-size: 12px;
   }
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { apiFetch } from '../../services/api'
-import MediaCard from '../../components/MediaCard/MediaCard'
+import PersonCreditCard from '../../components/MediaCard/PersonCreditCard'
 
 import styles from './PersonDetails.module.css'
 
@@ -63,29 +63,21 @@ function PersonCreditSection({ title, credits, mediaType, roleType }) {
             ? item.title
             : item.name
 
-          const role = roleType === 'cast'
-            ? item.character
-            : item.job
-
           return (
             <div
               className={styles.creditCard}
               key={`${mediaType}-${item.id}-${item.credit_id}`}
             >
-              <MediaCard
+              <PersonCreditCard
                 id={item.id}
                 title={mediaTitle}
                 posterPath={item.poster_path}
                 releaseDate={releaseDate}
+                role={roleType === 'cast'
+                  ? item.character
+                  : item.job}
                 mediaType={mediaType}
               />
-
-              {role && (
-                <p className={styles.creditRole}>
-                  {roleType === 'cast' ? 'Роль: ' : 'Посада: '}
-                  {role}
-                </p>
-              )}
             </div>
           )
         })}

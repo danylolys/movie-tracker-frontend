@@ -7,11 +7,11 @@ import { apiFetch } from '../../services/api'
 import styles from './WatchlistControl.module.css'
 
 const statuses = [
-  { value: 0, label: 'Заплановано' },
-  { value: 1, label: 'Переглядаю' },
-  { value: 2, label: 'Переглянуто' },
-  { value: 3, label: 'Закинуто' },
-  { value: 4, label: 'На паузі' }
+  { value: 0, label: 'Заплановано', color: 'planned' },
+  { value: 1, label: 'Переглядаю', color: 'watching' },
+  { value: 2, label: 'Переглянуто', color: 'completed' },
+  { value: 3, label: 'Закинуто', color: 'dropped' },
+  { value: 4, label: 'На паузі', color: 'paused' }
 ]
 
 function WatchlistControl({ media, mediaType }) {
@@ -22,11 +22,15 @@ function WatchlistControl({ media, mediaType }) {
 
   const [watchlistItem, setWatchlistItem] = useState(null)
   const [review, setReview] = useState(null)
-  const [rating, setRating] = useState(10)
+  const [rating, setRating] = useState(0)
 
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState('')
+
+  const currentStatus = statuses.find(
+    status => status.value === watchlistItem?.status
+  )
 
   useEffect(() => {
     let isActive = true
@@ -38,6 +42,7 @@ function WatchlistControl({ media, mediaType }) {
       }
 
       try {
+        setIsLoading(true)
         setError('')
 
         const response = await apiFetch(
@@ -77,11 +82,11 @@ function WatchlistControl({ media, mediaType }) {
 
           if (isActive) {
             setReview(existingReview || null)
-            setRating(existingReview ? existingReview.rating : 10)
+            setRating(existingReview?.rating ?? 0)
           }
         } else {
           setReview(null)
-          setRating(10)
+          setRating(0)
         }
       } catch (error) {
         if (isActive) {
@@ -128,6 +133,8 @@ function WatchlistControl({ media, mediaType }) {
       }
 
       setWatchlistItem(await response.json())
+      setReview(null)
+      setRating(0)
     } catch (error) {
       setError(error.message)
     } finally {
@@ -205,7 +212,7 @@ function WatchlistControl({ media, mediaType }) {
 
       setWatchlistItem(null)
       setReview(null)
-      setRating(10)
+      setRating(0)
     } catch (error) {
       setError(error.message)
     } finally {
@@ -213,22 +220,37 @@ function WatchlistControl({ media, mediaType }) {
     }
   }
 
-  async function handleSaveRating() {
-    if (!watchlistItem) {
-      setError('Спочатку додайте до списку перегляду')
-      return
-    }
+  async function handleSaveRating(newRating) {
+    if (!watchlistItem) return;
 
     try {
-      setIsSaving(true)
-      setError('')
+      setIsSaving(true);
+      setError('');
+
+      if (newRating === 0) {
+        if (!review) return;
+
+        const response = await apiFetch(
+          `/Reviews/${review.id}?userId=${userId}`,
+          {
+            method: 'DELETE'
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Не вдалося видалити оцінку');
+        }
+
+        setReview(null);
+        return;
+      }
 
       const reviewData = {
         tmdbId: mediaId,
         type: mediaType,
-        rating: Number(rating),
+        rating: newRating,
         comment: ''
-      }
+      };
 
       const response = await apiFetch(
         review
@@ -241,51 +263,28 @@ function WatchlistControl({ media, mediaType }) {
           },
           body: JSON.stringify(reviewData)
         }
-      )
+      );
 
       if (!response.ok) {
-        throw new Error('Не вдалося зберегти оцінку')
+        throw new Error('Не вдалося зберегти оцінку');
       }
 
       if (review) {
         setReview(previous => ({
           ...previous,
-          rating: Number(rating)
-        }))
+          rating: newRating
+        }));
       } else {
-        setReview(await response.json())
+        setReview(await response.json());
       }
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
+      setRating(review?.rating ?? 0);
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
   }
 
-  async function handleDeleteRating() {
-    try {
-      setIsSaving(true)
-      setError('')
-
-      const response = await apiFetch(
-        `/Reviews/${review.id}?userId=${userId}`,
-        {
-          method: 'DELETE'
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Не вдалося видалити оцінку')
-      }
-
-      setReview(null)
-      setRating(10)
-    } catch (error) {
-      setError(error.message)
-    } finally {
-      setIsSaving(false)
-    }
-  }
 
   if (!isAuthenticated) {
     return (
@@ -300,94 +299,103 @@ function WatchlistControl({ media, mediaType }) {
   }
 
   if (isLoading) {
-    return <p>Завантаження...</p>
+    return (
+      <div className={styles.container}>
+        <p className={styles.loading}>Завантаження...</p>
+      </div>
+    )
   }
 
   return (
     <div className={styles.container}>
-      <div className={styles.watchlistContainer}>
-        {watchlistItem ? (
-          <>
+      {watchlistItem ? (
+        <>
+          <div className={styles.watchlistContainer}>
             <label htmlFor="watchStatus">
-              Статус перегляду
+              Статус
             </label>
 
-            <select
-              id="watchStatus"
-              value={watchlistItem.status}
-              onChange={handleStatusChange}
-              disabled={isSaving}
-            >
-              {statuses.map(status => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
-                </option>
-              ))}
-            </select>
+            <div className={styles.statusControl}>
+              <select
+                id="watchStatus"
+                value={watchlistItem.status}
+                onChange={handleStatusChange}
+                disabled={isSaving}
+                className={
+                  currentStatus
+                    ? styles[currentStatus.color]
+                    : ''
+                }
+              >
+                {statuses.map(status => (
+                  <option
+                    key={status.value}
+                    value={status.value}
+                  >
+                    {status.label}
+                  </option>
+                ))}
+              </select>
 
-            <button
-              onClick={handleDelete}
-              disabled={isSaving}
-              className={styles.deleteButton}
-            >
-              Видалити зі списку
-            </button>
-          </>
-        ) : (
-          <button
-            onClick={handleAdd}
-            disabled={isSaving}
-            className={styles.button}
-          >
-            {isSaving ? 'Додавання...' : 'Додати до списку'}
-          </button>
-        )}
-      </div>
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={isSaving}
+                className={styles.removeButton}
+                aria-label="Видалити зі списку"
+                title="Видалити зі списку"
+              >
+                ×
+              </button>
+            </div>
+          </div>
 
-      {watchlistItem && (
-        <div className={styles.ratingContainer}>
-          <label htmlFor="mediaRating">
-            Ваша оцінка
-          </label>
+          <div className={styles.ratingContainer}>
+            <label htmlFor="mediaRating">
+              Ваша оцінка
+            </label>
 
-          <select
-            id="mediaRating"
-            value={rating}
-            onChange={event => setRating(Number(event.target.value))}
-            disabled={isSaving}
-          >
-            {Array.from({ length: 10 }, (_, index) => index + 1).map(value => (
-              <option key={value} value={value}>
-                {value} / 10
-              </option>
-            ))}
-          </select>
+            <div className={styles.ratingControl}>
+              <select
+                id="mediaRating"
+                value={rating}
+                onChange={event => {
+                  const newRating = Number(event.target.value);
+                  setRating(newRating);
+                  handleSaveRating(newRating);
+                }}
+                disabled={isSaving}
+              >
+                <option value={0}>Без оцінки</option>
 
-          <button
-            onClick={handleSaveRating}
-            disabled={isSaving}
-            className={styles.button}
-          >
-            {isSaving
-              ? 'Збереження...'
-              : review
-                ? 'Оновити оцінку'
-                : 'Зберегти оцінку'}
-          </button>
+                {Array.from(
+                  { length: 10 },
+                  (_, index) => index + 1
+                ).map(value => (
+                  <option key={value} value={value}>
+                    {value} / 10
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-          {review && (
-            <button
-              onClick={handleDeleteRating}
-              disabled={isSaving}
-              className={styles.deleteButton}
-            >
-              Видалити оцінку
-            </button>
-          )}
-        </div>
+        </>
+      ) : (
+        <button
+          onClick={handleAdd}
+          disabled={isSaving}
+          className={styles.button}
+        >
+          {isSaving ? 'Додавання...' : 'Додати до списку'}
+        </button>
       )}
 
-      {error && <p className={styles.error}>{error}</p>}
+      {error && (
+        <p className={styles.error}>
+          {error}
+        </p>
+      )}
     </div>
   )
 }

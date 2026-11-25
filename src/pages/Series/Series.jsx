@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import MediaCard from "../../components/MediaCard/MediaCard";
 
-import styles from "./Series.module.css";
+import styles from "../Movies/Movies.module.css";
 
 const API_URL = "http://localhost:5194/api/TmdbTv/discover";
 

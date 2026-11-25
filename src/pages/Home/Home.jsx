@@ -28,8 +28,8 @@ function Home() {
         const moviesData = await moviesResponse.json();
         const tvData = await tvResponse.json();
 
-        setMovies(moviesData.results);
-        setTvShows(tvData.results);
+        setMovies(moviesData.results || []);
+        setTvShows(tvData.results || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -41,18 +41,27 @@ function Home() {
   }, []);
 
   if (loading) {
-    return <div className={styles.message}>Завантаження...</div>;
+    return (
+      <div className={styles.message}>
+        Завантаження...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className={`${styles.message} ${styles.error}`}>{error}</div>;
+    return (
+      <div className={`${styles.message} ${styles.error}`}>
+        {error}
+      </div>
+    );
   }
 
   return (
     <main className={styles.container}>
-
       <section className={styles.section}>
-        <h1 className={styles.title}>Популярні фільми</h1>
+        <div className={styles.sectionHeader}>
+          <h1 className={styles.title}>Популярні фільми</h1>
+        </div>
 
         <div className={styles.moviesRow}>
           {movies.map((movie) => (
@@ -70,7 +79,9 @@ function Home() {
       </section>
 
       <section className={styles.section}>
-        <h1 className={styles.title}>Популярні серіали</h1>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.title}>Популярні серіали</h2>
+        </div>
 
         <div className={styles.moviesRow}>
           {tvShows.map((tvShow) => (
@@ -86,7 +97,6 @@ function Home() {
           ))}
         </div>
       </section>
-
     </main>
   );
 }

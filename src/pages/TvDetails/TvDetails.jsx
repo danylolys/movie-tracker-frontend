@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 import WatchlistControl from "../../components/WatchlistControl/WatchlistControl";
 import Trailer from "../../components/Trailer/Trailer";
+import Media from "../../components/Media/Media";
+import PersonCard from "../../components/PersonCard/PersonCard";
 
-import styles from "../MovieDetails/MovieDetails.module.css";
+import styles from "../MovieDetails/Media.module.css";
 
 const API_URL = "http://localhost:5194/api/TmdbTv/tv";
 const IMAGE_URL = "https://image.tmdb.org/t/p";
 
 function TvDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [tv, setTv] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTv = async () => {
@@ -80,32 +82,33 @@ function TvDetails() {
   const seasons = tv.seasons || [];
   const networks = tv.networks || [];
 
+  const releaseYear = tv.first_air_date
+    ? new Date(tv.first_air_date).getFullYear()
+    : "Рік невідомий";
+
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       <section
         className={styles.hero}
         style={{
           backgroundImage: tv.backdrop_path
-            ? `linear-gradient(to right, rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0.5)), url(${IMAGE_URL}/original${tv.backdrop_path})`
+            ? `linear-gradient(
+                90deg,
+                rgba(0, 0, 6, 0.97) 0%,
+                rgba(0, 0, 6, 0.88) 50%,
+                rgba(0, 0, 6, 0.55) 100%
+              ), url(${IMAGE_URL}/original${tv.backdrop_path})`
             : "none"
         }}
       >
-        <div className={styles.movieHeader}>
-          <div className={styles.poster}>
-            {tv.poster_path ? (
-              <img
-                src={`${IMAGE_URL}/w500${tv.poster_path}`}
-                alt={tv.name}
-              />
-            ) : (
-              <div className={styles.noPoster}>
-                Немає постера
-              </div>
-            )}
-          </div>
-
+        <div className={styles.heroContent}>
           <div className={styles.movieInfo}>
-            <h1>{tv.name}</h1>
+            <h1>
+              {tv.name}
+              <span className={styles.releaseYear}>
+                ({releaseYear})
+              </span>
+            </h1>
 
             {tv.original_name !== tv.name && (
               <p className={styles.originalTitle}>
@@ -113,20 +116,18 @@ function TvDetails() {
               </p>
             )}
 
-            <div className={styles.details}>
-              <span>
-                {tv.first_air_date
-                  ? new Date(tv.first_air_date).getFullYear()
-                  : "Рік невідомий"}
-              </span>
+            <div className={styles.meta}>
+              {tv.first_air_date && (
+                <span>{formatDate(tv.first_air_date)}</span>
+              )}
 
-              <span>
-                {tv.number_of_seasons} сезонів
-              </span>
+              {tv.number_of_seasons > 0 && (
+                <span>{tv.number_of_seasons} сезонів</span>
+              )}
 
-              <span>
-                {tv.number_of_episodes} епізодів
-              </span>
+              {tv.number_of_episodes > 0 && (
+                <span>{tv.number_of_episodes} епізодів</span>
+              )}
 
               {tv.status && (
                 <span>{formatStatus(tv.status)}</span>
@@ -134,15 +135,13 @@ function TvDetails() {
             </div>
 
             <div className={styles.rating}>
+              <span className={styles.star}>★</span>
+
               <strong>
                 {Number(tv.vote_average || 0).toFixed(1)}
               </strong>
 
-              <span>/ 10 TMDB</span>
-
-              <span>
-                ({tv.vote_count || 0} голосів)
-              </span>
+              <span className={styles.tmdb}>TMDB</span>
             </div>
 
             {tv.genres?.length > 0 && (
@@ -162,92 +161,119 @@ function TvDetails() {
               </div>
             )}
           </div>
+
+          <div className={styles.posterColumn}>
+            <div className={styles.poster}>
+              {tv.poster_path ? (
+                <img
+                  src={`${IMAGE_URL}/w500${tv.poster_path}`}
+                  alt={tv.name}
+                />
+              ) : (
+                <div className={styles.noPoster}>
+                  Немає постера
+                </div>
+              )}
+            </div>
+
+            <WatchlistControl
+              media={tv}
+              mediaType={2}
+            />
+          </div>
         </div>
       </section>
 
-      <WatchlistControl
-        media={tv}
-        mediaType={2}
+      <Media
+        tmdbId={id}
+        type={2}
       />
 
       <section className={styles.content}>
         <div className={styles.movieFacts}>
           <h2>Інформація про серіал</h2>
 
-          <div className={styles.fact}>
-            <span>Оригінальна назва</span>
-            <strong>{tv.original_name || "Невідомо"}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Дата першого ефіру</span>
-            <strong>{formatDate(tv.first_air_date)}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Дата останнього ефіру</span>
-            <strong>{formatDate(tv.last_air_date)}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Статус</span>
-            <strong>{formatStatus(tv.status)}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Кількість сезонів</span>
-            <strong>{tv.number_of_seasons}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Кількість епізодів</span>
-            <strong>{tv.number_of_episodes}</strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Мова оригіналу</span>
-            <strong>
-              {tv.original_language?.toUpperCase() || "Невідомо"}
-            </strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Країна</span>
-            <strong>
-              {tv.origin_country?.join(", ") || "Невідомо"}
-            </strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>Телеканали</span>
-            <strong>
-              {networks.map((network) => network.name).join(", ") || "Невідомо"}
-            </strong>
-          </div>
-
-          <div className={styles.fact}>
-            <span>У виробництві</span>
-            <strong>{tv.in_production ? "Так" : "Ні"}</strong>
-          </div>
-
-          {tv.homepage && (
+          <div className={styles.factsGrid}>
             <div className={styles.fact}>
-              <span>Офіційний сайт</span>
-              <a
-                href={tv.homepage}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Відвідати
-              </a>
+              <span>Оригінальна назва</span>
+              <strong>{tv.original_name || "Невідомо"}</strong>
             </div>
-          )}
+
+            <div className={styles.fact}>
+              <span>Дата першого ефіру</span>
+              <strong>{formatDate(tv.first_air_date)}</strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Дата останнього ефіру</span>
+              <strong>{formatDate(tv.last_air_date)}</strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Статус</span>
+              <strong>{formatStatus(tv.status)}</strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Кількість сезонів</span>
+              <strong>{tv.number_of_seasons ?? "Невідомо"}</strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Кількість епізодів</span>
+              <strong>{tv.number_of_episodes ?? "Невідомо"}</strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Мова оригіналу</span>
+              <strong>
+                {tv.original_language?.toUpperCase() || "Невідомо"}
+              </strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Країна</span>
+              <strong>
+                {tv.origin_country?.join(", ") || "Невідомо"}
+              </strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>Телеканали</span>
+              <strong>
+                {networks.map((network) => network.name).join(", ") || "Невідомо"}
+              </strong>
+            </div>
+
+            <div className={styles.fact}>
+              <span>У виробництві</span>
+              <strong>{tv.in_production ? "Так" : "Ні"}</strong>
+            </div>
+
+            {tv.homepage && (
+              <div className={styles.fact}>
+                <span>Офіційний сайт</span>
+                <strong>
+                  <a
+                    href={tv.homepage}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Відвідати
+                  </a>
+                </strong>
+              </div>
+            )}
+          </div>
         </div>
 
-        <Trailer mediaId={id} mediaType={2} />
+        <Trailer
+          mediaId={id}
+          mediaType={2}
+        />
 
         {seasons.length > 0 && (
-          <div className={styles.castSection}>
+          <section className={styles.castSection}>
             <h2>Сезони</h2>
 
             <div className={styles.seasonsGrid}>
@@ -291,89 +317,80 @@ function TvDetails() {
                 </article>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
         {tv.last_episode_to_air && (
-          <div className={styles.castSection}>
+          <section className={styles.castSection}>
             <h2>Останній епізод</h2>
 
-            <div className={styles.fact}>
-              <span>Назва</span>
-              <strong>{tv.last_episode_to_air.name}</strong>
-            </div>
+            <div className={styles.factsGrid}>
+              <div className={styles.fact}>
+                <span>Назва</span>
+                <strong>
+                  {tv.last_episode_to_air.name || "Невідомо"}
+                </strong>
+              </div>
 
-            <div className={styles.fact}>
-              <span>Сезон</span>
-              <strong>{tv.last_episode_to_air.season_number}</strong>
-            </div>
+              <div className={styles.fact}>
+                <span>Сезон</span>
+                <strong>
+                  {tv.last_episode_to_air.season_number}
+                </strong>
+              </div>
 
-            <div className={styles.fact}>
-              <span>Епізод</span>
-              <strong>{tv.last_episode_to_air.episode_number}</strong>
-            </div>
+              <div className={styles.fact}>
+                <span>Епізод</span>
+                <strong>
+                  {tv.last_episode_to_air.episode_number}
+                </strong>
+              </div>
 
-            <div className={styles.fact}>
-              <span>Дата виходу</span>
-              <strong>
-                {formatDate(tv.last_episode_to_air.air_date)}
-              </strong>
+              <div className={styles.fact}>
+                <span>Дата виходу</span>
+                <strong>
+                  {formatDate(tv.last_episode_to_air.air_date)}
+                </strong>
+              </div>
             </div>
-          </div>
+          </section>
         )}
 
         {cast.length > 0 && (
-          <div className={styles.castSection}>
-            <h2>Акторський склад</h2>
+          <section className={styles.castSection}>
+            <div className={styles.sectionHeader}>
+              <h2>Акторський склад</h2>
 
-            <button
-              onClick={() =>
-                navigate("/media-crew", {
-                  state: {
-                    title: tv.name,
-                    backUrl: `/series/${id}`,
-                    cast: tv.credits?.cast || [],
-                    crew: tv.credits?.crew || []
-                  }
-                })
-              }
-            >
-              Переглянути всю команду
-            </button>
+              <button
+                className={styles.crewButton}
+                onClick={() =>
+                  navigate("/media-crew", {
+                    state: {
+                      title: tv.name,
+                      backUrl: `/series/${id}`,
+                      cast: tv.credits?.cast || [],
+                      crew: tv.credits?.crew || []
+                    }
+                  })
+                }
+              >
+                Переглянути всю команду
+                <span>→</span>
+              </button>
+            </div>
 
             <div className={styles.castGrid}>
               {cast.map((person) => (
-                <Link
-                  to={`/people/${person.id}`}
+                <PersonCard
                   key={person.id}
-                  className={styles.castCard}
-                >
-                  <div className={styles.castPhoto}>
-                    {person.profile_path ? (
-                      <img
-                        src={`${IMAGE_URL}/w185${person.profile_path}`}
-                        alt={person.name}
-                      />
-                    ) : (
-                      <div className={styles.noPhoto}>
-                        Немає фото
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={styles.castInfo}>
-                    <strong>{person.name}</strong>
-                    <span>
-                      {person.character || "Невідома роль"}
-                    </span>
-                  </div>
-                </Link>
+                  person={person}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )}
       </section>
-    </div>
+    </main>
   );
 }
 

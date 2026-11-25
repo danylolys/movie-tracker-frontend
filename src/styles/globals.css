@@ -4,7 +4,7 @@ body {
   font-weight: var(--font-weight-regular);
   color: var(--color-text);
 
-  background-color: var(--color-background-deep);
+  background-color: var(--color-background);
   line-height: 1;
 }
 

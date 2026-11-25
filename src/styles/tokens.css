@@ -1,37 +1,26 @@
 :root {
-  --color-primary: #7f30e4;
-  --color-primary-hover: #ae70f1;
-  --color-primary-active: #3c269d;
+  --color-background: #000006;
+  --color-accent: #D42A2D;
 
-  --color-secondary: #ae70f1;
-  --color-secondary-hover: #cdbef1;
+  --color-white: #F6F6F6;
+  --color-black: #000006;
+  --color-secondary: #A7A7AF;
 
-  --color-accent: #cdbef1;
+  --color-surface: #141419;
+  --color-surface-hover: #202026;
+  --color-border: #29292F;
 
-  --color-background: #19183a;
-  --color-background-deep: #000001;
+  --color-status-planned: #E5B83F;
+  --color-status-watching: #3989E8;
+  --color-status-completed: #38A66A;
+  --color-status-dropped: #D94242;
+  --color-status-paused: #9865D8;
 
-  --color-surface: #3c269d;
-  --color-surface-hover: #3c269d;
-
-  --color-text: #fbfaff;
-  --color-text-2: #b5b4b8;
-  --color-text-3: #cdbef1;
-  --color-text-muted: #ae70f1;
-  --color-text-inverse: #000001;
-
-  --color-border: #3c269d;
-  --color-border-focus: #ae70f1;
-
-  --color-red: #da1e47;
-  --color-blue: #2854cb;
-  --color-green: #abcb28;
+  --border-radius: 15px;
 
   --font-weight-regular: 400;
   --font-weight-bold: 700;
   --font-weight-black: 900;
 
   --font-family-base: Arial, Helvetica, sans-serif;
-
-  --border-radius-default: 15px;
 }

@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 import WatchlistControl from "../../components/WatchlistControl/WatchlistControl";
 import Trailer from "../../components/Trailer/Trailer";
 import Media from "../../components/Media/Media";
+import PersonCard from "../../components/PersonCard/PersonCard";
 
-import styles from "./MovieDetails.module.css";
+import styles from "./media.module.css";
 
 const API_URL = "http://localhost:5194/api/TmdbMovie";
 const IMAGE_URL = "https://image.tmdb.org/t/p";
 
 function MovieDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -52,6 +53,12 @@ function MovieDetails() {
     }).format(value);
   };
 
+  const formatDate = (date) => {
+    if (!date) return "Невідомо";
+
+    return new Date(date).toLocaleDateString("uk-UA");
+  };
+
   if (loading) {
     return (
       <div className={styles.message}>
@@ -74,32 +81,33 @@ function MovieDetails() {
 
   const cast = movie.credits?.cast?.slice(0, 10) || [];
 
+  const releaseYear = movie.release_date
+    ? new Date(movie.release_date).getFullYear()
+    : "Рік невідомий";
+
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       <section
         className={styles.hero}
         style={{
           backgroundImage: movie.backdrop_path
-            ? `linear-gradient(to right, rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0.5)), url(${IMAGE_URL}/original${movie.backdrop_path})`
+            ? `linear-gradient(
+                90deg,
+                rgba(0, 0, 6, 0.97) 0%,
+                rgba(0, 0, 6, 0.88) 50%,
+                rgba(0, 0, 6, 0.55) 100%
+              ), url(${IMAGE_URL}/original${movie.backdrop_path})`
             : "none"
         }}
       >
-        <div className={styles.movieHeader}>
-          <div className={styles.poster}>
-            {movie.poster_path ? (
-              <img
-                src={`${IMAGE_URL}/w500${movie.poster_path}`}
-                alt={movie.title}
-              />
-            ) : (
-              <div className={styles.noPoster}>
-                Немає постера
-              </div>
-            )}
-          </div>
-
+        <div className={styles.heroContent}>
           <div className={styles.movieInfo}>
-            <h1>{movie.title}</h1>
+            <h1>
+              {movie.title}
+              <span className={styles.releaseYear}>
+                ({releaseYear})
+              </span>
+            </h1>
 
             {movie.original_title !== movie.title && (
               <p className={styles.originalTitle}>
@@ -107,12 +115,10 @@ function MovieDetails() {
               </p>
             )}
 
-            <div className={styles.details}>
-              <span>
-                {movie.release_date
-                  ? new Date(movie.release_date).getFullYear()
-                  : "Рік невідомий"}
-              </span>
+            <div className={styles.meta}>
+              {movie.release_date && (
+                <span>{formatDate(movie.release_date)}</span>
+              )}
 
               {movie.runtime > 0 && (
                 <span>{movie.runtime} хв.</span>
@@ -124,13 +130,13 @@ function MovieDetails() {
             </div>
 
             <div className={styles.rating}>
+              <span className={styles.star}>★</span>
+
               <strong>
                 {Number(movie.vote_average || 0).toFixed(1)}
               </strong>
-              <span>/ 10 TMDB</span>
-              <span>
-                ({movie.vote_count || 0} голосів)
-              </span>
+
+              <span className={styles.tmdb}>TMDB</span>
             </div>
 
             {movie.genres?.length > 0 && (
@@ -150,13 +156,28 @@ function MovieDetails() {
               </div>
             )}
           </div>
+
+          <div className={styles.posterColumn}>
+            <div className={styles.poster}>
+              {movie.poster_path ? (
+                <img
+                  src={`${IMAGE_URL}/w500${movie.poster_path}`}
+                  alt={movie.title}
+                />
+              ) : (
+                <div className={styles.noPoster}>
+                  Немає постера
+                </div>
+              )}
+            </div>
+
+            <WatchlistControl
+              media={movie}
+              mediaType={1}
+            />
+          </div>
         </div>
       </section>
-
-      <WatchlistControl
-        media={movie}
-        mediaType={1}
-      />
 
       <Media
         tmdbId={id}
@@ -167,93 +188,87 @@ function MovieDetails() {
         <div className={styles.movieFacts}>
           <h2>Інформація про фільм</h2>
 
-          <div className={styles.fact}>
-            <span>Оригінальна назва</span>
-            <strong>{movie.original_title || "Невідомо"}</strong>
-          </div>
+          <div className={styles.factsGrid}>
+            <div className={styles.fact}>
+              <span>Оригінальна назва</span>
+              <strong>
+                {movie.original_title || "Невідомо"}
+              </strong>
+            </div>
 
-          <div className={styles.fact}>
-            <span>Дата виходу</span>
-            <strong>{movie.release_date || "Невідомо"}</strong>
-          </div>
+            <div className={styles.fact}>
+              <span>Дата виходу</span>
+              <strong>
+                {formatDate(movie.release_date)}
+              </strong>
+            </div>
 
-          <div className={styles.fact}>
-            <span>Режисер</span>
-            <strong>{director?.name || "Невідомо"}</strong>
-          </div>
+            <div className={styles.fact}>
+              <span>Режисер</span>
+              <strong>
+                {director?.name || "Невідомо"}
+              </strong>
+            </div>
 
-          <div className={styles.fact}>
-            <span>Мова оригіналу</span>
-            <strong>
-              {movie.original_language?.toUpperCase() || "Невідомо"}
-            </strong>
-          </div>
+            <div className={styles.fact}>
+              <span>Мова оригіналу</span>
+              <strong>
+                {movie.original_language?.toUpperCase() || "Невідомо"}
+              </strong>
+            </div>
 
-          <div className={styles.fact}>
-            <span>Бюджет</span>
-            <strong>{formatMoney(movie.budget)}</strong>
-          </div>
+            <div className={styles.fact}>
+              <span>Бюджет</span>
+              <strong>{formatMoney(movie.budget)}</strong>
+            </div>
 
-          <div className={styles.fact}>
-            <span>Касові збори</span>
-            <strong>{formatMoney(movie.revenue)}</strong>
+            <div className={styles.fact}>
+              <span>Касові збори</span>
+              <strong>{formatMoney(movie.revenue)}</strong>
+            </div>
           </div>
         </div>
 
-        <Trailer mediaId={id} mediaType={1} />
+        <Trailer
+          mediaId={id}
+          mediaType={1}
+        />
 
         {cast.length > 0 && (
-          <div className={styles.castSection}>
-            <h2>Акторський склад</h2>
+          <section className={styles.castSection}>
+            <div className={styles.sectionHeader}>
+              <h2>Акторський склад</h2>
 
-            <button
-              onClick={() =>
-                navigate("/media-crew", {
-                  state: {
-                    title: movie.title,
-                    backUrl: `/series/${id}`,
-                    cast: movie.credits?.cast || [],
-                    crew: movie.credits?.crew || []
-                  }
-                })
-              }
-            >
-              Переглянути всю команду
-            </button>
+              <button
+                className={styles.crewButton}
+                onClick={() =>
+                  navigate("/media-crew", {
+                    state: {
+                      title: movie.title,
+                      backUrl: `/movies/${id}`,
+                      cast: movie.credits?.cast || [],
+                      crew: movie.credits?.crew || []
+                    }
+                  })
+                }
+              >
+                Переглянути всю команду
+                <span>→</span>
+              </button>
+            </div>
 
             <div className={styles.castGrid}>
               {cast.map((person) => (
-                <Link
-                  to={`/people/${person.id}`}
+                <PersonCard
                   key={person.id}
-                  className={styles.castCard}
-                >
-                  <div className={styles.castPhoto}>
-                    {person.profile_path ? (
-                      <img
-                        src={`${IMAGE_URL}/w185${person.profile_path}`}
-                        alt={person.name}
-                      />
-                    ) : (
-                      <div className={styles.noPhoto}>
-                        Немає фото
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={styles.castInfo}>
-                    <strong>{person.name}</strong>
-                    <span>
-                      {person.character || "Невідома роль"}
-                    </span>
-                  </div>
-                </Link>
+                  person={person}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )}
       </section>
-    </div>
+    </main>
   );
 }
 

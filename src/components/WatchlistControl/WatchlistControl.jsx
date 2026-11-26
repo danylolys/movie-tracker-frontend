@@ -186,9 +186,9 @@ function WatchlistControl({ media, mediaType }) {
       setIsSaving(true)
       setError('')
 
-      if (review) {
+      if (review?.rating > 0) {
         const reviewResponse = await apiFetch(
-          `/Reviews/${review.id}?userId=${userId}`,
+          `/Reviews/${review.id}/rating`,
           {
             method: 'DELETE'
           }
@@ -221,70 +221,67 @@ function WatchlistControl({ media, mediaType }) {
   }
 
   async function handleSaveRating(newRating) {
-    if (!watchlistItem) return;
+    if (!watchlistItem) return
 
     try {
-      setIsSaving(true);
-      setError('');
+      setIsSaving(true)
+      setError('')
 
       if (newRating === 0) {
-        if (!review) return;
+        if (!review || review.rating === 0) return
 
         const response = await apiFetch(
-          `/Reviews/${review.id}?userId=${userId}`,
+          `/Reviews/${review.id}/rating`,
           {
             method: 'DELETE'
           }
-        );
+        )
 
         if (!response.ok) {
-          throw new Error('Не вдалося видалити оцінку');
+          throw new Error('Не вдалося видалити оцінку')
         }
 
-        setReview(null);
-        return;
-      }
+        setReview(previous => ({
+          ...previous,
+          rating: 0
+        }))
 
-      const reviewData = {
-        tmdbId: mediaId,
-        type: mediaType,
-        rating: newRating,
-        comment: ''
-      };
+        return
+      }
 
       const response = await apiFetch(
         review
-          ? `/Reviews/${review.id}?userId=${userId}`
-          : `/Reviews?userId=${userId}`,
+          ? `/Reviews/${review.id}/rating`
+          : `/Reviews/rating`,
         {
           method: review ? 'PUT' : 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(reviewData)
+          body: JSON.stringify(
+            review
+              ? { rating: newRating }
+              : {
+                  tmdbId: mediaId,
+                  type: mediaType,
+                  rating: newRating
+                }
+          )
         }
-      );
+      )
 
       if (!response.ok) {
-        throw new Error('Не вдалося зберегти оцінку');
+        throw new Error('Не вдалося зберегти оцінку')
       }
 
-      if (review) {
-        setReview(previous => ({
-          ...previous,
-          rating: newRating
-        }));
-      } else {
-        setReview(await response.json());
-      }
+      setReview(await response.json())
     } catch (error) {
-      setError(error.message);
-      setRating(review?.rating ?? 0);
+      setError(error.message)
+      setRating(review?.rating ?? 0)
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
   }
-
 
   if (!isAuthenticated) {
     return (
@@ -360,9 +357,9 @@ function WatchlistControl({ media, mediaType }) {
                 id="mediaRating"
                 value={rating}
                 onChange={event => {
-                  const newRating = Number(event.target.value);
-                  setRating(newRating);
-                  handleSaveRating(newRating);
+                  const newRating = Number(event.target.value)
+                  setRating(newRating)
+                  handleSaveRating(newRating)
                 }}
                 disabled={isSaving}
               >
@@ -379,7 +376,6 @@ function WatchlistControl({ media, mediaType }) {
               </select>
             </div>
           </div>
-
         </>
       ) : (
         <button

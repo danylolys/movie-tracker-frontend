@@ -1,0 +1,405 @@
+.container {
+  width: 100%;
+  margin-top: 45px;
+  color: var(--color-white);
+  font-family: var(--font-family-base);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.title {
+  margin: 0;
+  font-size: 25px;
+  font-weight: var(--font-weight-bold);
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 27px;
+  height: 27px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  color: var(--color-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form {
+  margin-bottom: 30px;
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
+}
+
+.formTitle {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+}
+
+.commentField {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.commentField label {
+  color: var(--color-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.commentField textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 13px 15px;
+  resize: vertical;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  outline: none;
+  background: var(--color-background);
+  color: var(--color-white);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  transition: border-color 0.2s ease;
+}
+
+.commentField textarea::placeholder {
+  color: var(--color-secondary);
+  opacity: 0.7;
+}
+
+.commentField textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.submitButton,
+.cancelButton {
+  min-height: 38px;
+  padding: 9px 17px;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.submitButton {
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #b92326;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cancelButton {
+  background: var(--color-surface-hover);
+  color: var(--color-secondary);
+}
+
+.cancelButton:hover {
+  color: var(--color-white);
+}
+
+.authMessage {
+  margin: 0 0 25px;
+  color: var(--color-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.authorName {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.youLabel {
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(212, 42, 45, 0.14);
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.date {
+  color: var(--color-secondary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.reviewHeaderRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.reviewActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.editButton,
+.deleteButton {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.editButton {
+  color: var(--color-secondary);
+}
+
+.editButton:hover {
+  color: var(--color-white);
+}
+
+.deleteButton {
+  color: var(--color-status-dropped);
+}
+
+.deleteButton:hover {
+  color: #ff6868;
+}
+
+.rating {
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+  gap: 3px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-white);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ratingMax {
+  color: var(--color-secondary);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.comment {
+  margin: 17px 0;
+  color: var(--color-white);
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.negativeComment {
+  color: #9999a1;
+}
+
+.reactionActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+}
+
+.reactionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-background);
+  color: var(--color-secondary);
+  font: inherit;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.reactionButton:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.reactionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.activeLike {
+  border-color: var(--color-status-completed);
+  background: rgba(56, 166, 106, 0.12);
+  color: var(--color-status-completed);
+}
+
+.activeDislike {
+  border-color: var(--color-status-dropped);
+  background: rgba(217, 66, 66, 0.12);
+  color: var(--color-status-dropped);
+}
+
+.totalRating {
+  min-width: 18px;
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.message {
+  margin: 0;
+  padding: 25px 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.error {
+  margin: 12px 0 0;
+  color: var(--color-status-dropped);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .container {
+    margin-top: 35px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .form {
+    padding: 17px;
+  }
+
+  .review {
+    padding: 16px;
+  }
+
+  .reviewHeader {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .authorName {
+    gap: 7px;
+    font-size: 13px;
+  }
+
+  .date {
+    font-size: 11px;
+  }
+
+  .reviewHeaderRight {
+    gap: 10px;
+  }
+
+  .reviewActions {
+    gap: 9px;
+  }
+
+  .editButton,
+  .deleteButton {
+    font-size: 11px;
+  }
+
+  .rating {
+    padding: 6px 8px;
+    font-size: 15px;
+  }
+
+  .comment {
+    margin: 14px 0;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 380px) {
+  .reviewHeader {
+    flex-direction: column;
+  }
+
+  .reviewHeaderRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

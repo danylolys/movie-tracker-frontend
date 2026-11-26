@@ -5,6 +5,7 @@ import WatchlistControl from "../../components/WatchlistControl/WatchlistControl
 import Trailer from "../../components/Trailer/Trailer";
 import Media from "../../components/Media/Media";
 import PersonCard from "../../components/PersonCard/PersonCard";
+import Reviews from "../../components/Reviews/Reviews";
 
 import styles from "../MovieDetails/Media.module.css";
 
@@ -389,6 +390,12 @@ function TvDetails() {
             </div>
           </section>
         )}
+
+        <Reviews
+          tmdbId={id}
+          type={2}
+        />
+
       </section>
     </main>
   );
